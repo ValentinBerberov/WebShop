@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+
 }
 
 <h1>Index</h1>
@@ -22,20 +23,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var row in Model.Chunk(4))
+        {
+            <tr>
+                @foreach(var item in row)
+                {
+                    var roundedPrice = Math.Round(item.Price, 2);
+
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            <div class="product">
+                                <p>@Html.DisplayFor(modelItem => item.Name)</p>
+                                <p>@Html.DisplayFor(modelItem => roundedPrice) BGN</p>
+                            </div>
+                        </a>
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>
+
+<style>
+    .product
+    {
+        color: black;
+        border: groove;
+    }
+</style>
